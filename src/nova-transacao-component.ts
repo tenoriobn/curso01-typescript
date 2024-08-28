@@ -1,20 +1,12 @@
-let saldo = 3000;
-
-alert('Outra frase aqui');
-
-const elementoSaldo = document.querySelector(".saldo-valor .valor") as HTMLElement;
-if (elementoSaldo !== null) {
-  elementoSaldo.textContent = saldo.toString();
-}
-
 const elementoFormulario = document.querySelector(".block-nova-transacao form") as HTMLFormElement;
+
 elementoFormulario.addEventListener("submit", function(event) {
   event.preventDefault();
 
   if(!elementoFormulario.checkValidity()) {
     alert("Por favor, preencha todos os campos da transação!");
     return
-  }
+  } 
 
   const inputTipoTransacao = elementoFormulario.querySelector("#tipoTransacao") as HTMLSelectElement;
   const inputValor = elementoFormulario.querySelector("#valor") as HTMLInputElement;
