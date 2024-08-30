@@ -1,41 +1,36 @@
 const elementoFormulario = document.querySelector(".block-nova-transacao form") as HTMLFormElement;
-
 elementoFormulario.addEventListener("submit", function(event) {
-  event.preventDefault();
+    event.preventDefault();
+    if (!elementoFormulario.checkValidity()) {
+      alert("Por favor, preencha todos os campos da transação!");
+      return;
+    }
 
-  if(!elementoFormulario.checkValidity()) {
-    alert("Por favor, preencha todos os campos da transação!");
-    return
-  } 
+    const inputTipoTransacao = elementoFormulario.querySelector("#tipoTransacao") as HTMLSelectElement;
+    const inputValor = elementoFormulario.querySelector("#valor") as HTMLInputElement;
+    const inputData = elementoFormulario.querySelector("#data") as HTMLInputElement;
 
-  const inputTipoTransacao = elementoFormulario.querySelector("#tipoTransacao") as HTMLSelectElement;
-  const inputValor = elementoFormulario.querySelector("#valor") as HTMLInputElement;
-  const inputData = elementoFormulario.querySelector("#data") as HTMLInputElement;
+    let tipoTransacao: TipoTransacao = inputTipoTransacao.value as TipoTransacao;
+    let valor: number = inputValor.valueAsNumber;
+    let data: Date = new Date(inputData.value);
 
-  let tipoTransacao: string = inputTipoTransacao.value;
-  let valor: number = inputValor.valueAsNumber;
-  let data: Date = new Date(inputData.value);
+    if (tipoTransacao == TipoTransacao.DEPOSITO) {
+      saldo += valor;
+    } else if (tipoTransacao == TipoTransacao.TRANSFERENCIA || tipoTransacao == TipoTransacao.PAGAMENTO_BOLETO) {
+      saldo -= valor;
+    } else {
+      alert("Tipo de Transação é inválido!");
+      return;
+    }
 
-  if (tipoTransacao === "Depósito") {
-    saldo += valor
+    elementoSaldo.textContent = saldo.toString();
 
-    console.log(saldo, valor)
-  } else if (tipoTransacao === "Transferência" || tipoTransacao === "Pagamento de Boleto") {
-    saldo -= valor;
-  } else {
-    alert("Tipo de Transação é inválido!");
-    return;
-  }
+    const novaTransacao: Transacao = {
+      tipoTransacao: tipoTransacao,
+      valor: valor,
+      data: data
+    };
 
-  elementoSaldo.textContent = saldo.toString();
-
-  const novaTransacao = {
-    tipoTransacao: tipoTransacao,
-    valor: valor,
-    data: data
-  }
-
-  console.log(novaTransacao)
-
-  elementoFormulario.reset();
+    console.log(novaTransacao);
+    elementoFormulario.reset();
 });
